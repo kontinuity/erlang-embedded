@@ -14,12 +14,8 @@
       .content
         %h1 News
 
-        - Dir["news/*.haml"].reverse.each do |file|
-          - file =~ /.*\/(.*).haml/
-          - date = $1
-          - if Date.parse(date) <= Date.today
-            %h2= date
-            .newsbox
-              = `haml #{file}`
+        = `haml #{"news/2011-01-17.haml"}`
+        = `haml #{"news/2010-06-09.haml"}`
+        = `haml #{"news/2010-06-02.haml"}`
 
       = `haml footer.haml`
