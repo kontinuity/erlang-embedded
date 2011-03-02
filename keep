@@ -1,4 +1,9 @@
-stdlib
 erts
 kernel
+stdlib
 compiler
+sasl
+tools
+inets
+mnesia
+public_key
