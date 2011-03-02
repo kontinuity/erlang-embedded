@@ -158,7 +158,7 @@ show "Creating bootstrap and building"
 
 for KEEP in $KEEPSIES; do
   show "Removing prebuilt files in $KEEP"
-  rm lib/$KEEP/ebin/*.beam
+  rm -f lib/$KEEP/ebin/*.beam
 done
 
 show "Creating release"
@@ -166,7 +166,7 @@ show "Creating release"
 
 echo $(pwd)
 
-pushd release/${HOST}/ 2> /dev/null || (show "Building release failed!" ; exit 1)
+pushd release/${HOST}/
 
 show "Running Install script to setup paths and executables"
 ./Install -cross -minimal $TARGET_ERL_ROOT
@@ -210,8 +210,8 @@ fi
 show "Creating tarball"
 tar czf ${WD}/${TAR_NAME}.tgz .
 
-popd
-popd
+## Test the resulted binary for TARGET compatability
+file erts-5.8.2/bin/beam
 
-## Test the resulted binaries for TARGET compatability
-file ./otp_src_R14B01/bin/${HOST}/erlexec
+popd # release/${HOST}
+popd # ${OTP_SRC}
