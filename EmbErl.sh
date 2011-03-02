@@ -154,7 +154,7 @@ for KEEP in $KEEPSIES; do
 done
 
 show "Creating bootstrap and building"
-./otp_build boot
+./otp_build boot -a
 
 for KEEP in $KEEPSIES; do
   show "Removing prebuilt files in $KEEP"
@@ -162,7 +162,7 @@ for KEEP in $KEEPSIES; do
 done
 
 show "Creating release"
-./otp_build release
+./otp_build release -a
 
 echo $(pwd)
 
