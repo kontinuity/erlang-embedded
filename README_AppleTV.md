@@ -1,37 +1,67 @@
+# Introduction
+
+These documents helped a lot:
+ 
+ * https://github.com/esl/erlang-embedded/
+ * http://www.erlang.org/doc/installation_guide/INSTALL-CROSS.html
+ * http://erlang.2086793.n4.nabble.com/Cross-compiling-with-OpenSSL-td2542347.html
+ * http://stuff.thatblogs.com/content/cross-compiling-openssl-how-cross-compile-openssl
+
+
 # Compile info
 
-The smallest package is obtain by using `./EmbErl.sh -s -c` (~2.0mb).
+The smallest package is obtain by using `./EmbErl.sh -s -S -c -C` (~2.0mb).
 
+Using a bit more than the miniming set of libraries, you can downsize
+to the following values:
 
+ *       7.8mb
+ * -C    7.1mb
+ * -Cc   7.1mb
+ * -c    6.9mb
+ * -s    2.8mb
+ * -sC   2.8mb
+ * -sc   2.8mb
+ * -scC  2.8mb
+ * -sSsC 2.8mb
+
+The compile time on a rather fast Intel quad core 3GHz is ~248s with all
+flags set.
+ 
 # Progress
 
-* + Autoconfigure works
-* + Configure works
-* + Host compilation works
-* + Host linking works
-* + Target compilation works
-* + Target linking fails
-* + Bundling
-* + Execution
-
+ * Autoconfigure works
+ * Configure works
+ * Host compilation works
+ * Host linking works
+ * Target compilation works
+ * Target linking works
+ * Bundling works
+ * erl execution works
+ * lib compiler (done! Compiler works! now we can compile on the AppleTV)
+ * erlc execution works
+ * lib sasl works
+ * lib tools works
 
 # Todos
 
-Add following libraries:
+ * Compile using termcap
+ * Compile with ssl (with dynamic ssl lib)
+ * Add following libraries:
+   * mnesia
+   * inets
+ * Make SSL (crypto, ssl, public\_key) work
+   * crypto
+   * ssl
+   * public\_key
+ * Test some system parameters:
+   * Run `> erlang:system_info(X).` to see the configuration
 
- * compiler (done! Compiler works! now we can compile on the AppleTV)
- * sasl
- * crypto
- * ssl
- * public_key
- * mnesia
- * inets
- * tools
+# Warnings
 
-Test some system parameters:
-
- * Run `> erlang:system_info(X).` to see the configuration
-
+I get some warnings when compiling the erl files as well as the c
+files, but so far I rather assume they are not relevant enough to
+break a running Erlang VM node.
 
 # Hurdles
 
@@ -137,6 +167,35 @@ This file is needed because of the `time_t` struct. This file in fact
 exists on the OS X system SDK and the iPhone simulator SDK, but not in
 the iPhone SDK. There, the missing struct exists in the `utime.h` file.
 
-## Solution
+### Solution
 Patch the run_erl.c file to use `utime.h` instead of `utmp.h`. (Or
 copy the `utmp.h` file into the iPhone SDK).
+
+
+## Missing apps
+
+### Problem
+Some apps are not compiled although they are added to the `./keep`
+file.
+
+### Solution
+The reason for that is that the `otp_build` steps are not executed
+using the `-a` flag, thus the `make` variable `OTP_SMALL_BUILD` will
+be set, which only includes a small test of library apps.
+Change the `otp_build` calls by adding the `-a` flag:
+
+    -./otp_build boot
+    +./otp_build boot -a
+    # :
+    +./otp_build release
+    -./otp_build release -a
+
+## Crypto compilation fails
+
+### Problem
+    crypto.c:36:33: error: openssl/opensslconf.h: No such file or directory
+
+Crypto can't be compiled, because the openssl library is not present.
+
+### Solution
+???
