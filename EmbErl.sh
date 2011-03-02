@@ -6,10 +6,10 @@ VERSION=R14B01
 OTP_SRC=otp_src_$VERSION
 OTP_SRC_TAR=${OTP_SRC}.tar.gz
 
-XCOMP_CONF=erl-xcomp-arm-linux.conf
+XCOMP_CONF=erl-xcomp-arm-darwin.conf
 XCOMP_CONF_PATH=xcomp/$XCOMP_CONF
 
-TARGET_ERL_ROOT=/opt/local/erlang
+TARGET_ERL_ROOT=/usr/local/erlang
 
 TAR_NAME="EmbErl_"
 
@@ -22,7 +22,10 @@ COMPRESS_APP=true
 
 #standard gcc opt levels [1,2,3,s]
 OPT_LEVEL=s
-HOST=arm-angstrom-linux-uclibceabi
+HOST=arm-apple-darwin10
+
+#STRIP_CMD=${HOST}-strip
+STRIP_CMD="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/strip"
 
 #Arguments parsing
 while getopts ":scCoH:h" Option
@@ -71,8 +74,8 @@ done
 
 #Create the erl-xcomp configuration
 cat $XCOMP_CONF.in > $XCOMP_CONF
-sed -i "s/@OPT_LEVEL@/${OPT_LEVEL}/" $XCOMP_CONF
-sed -i "s/@HOST@/${HOST}/" $XCOMP_CONF
+sed -ie "s/@OPT_LEVEL@/${OPT_LEVEL}/" $XCOMP_CONF
+sed -ie "s/@HOST@/${HOST}/" $XCOMP_CONF
 
 ## FUNCTION DECLARATION SPACE
 
@@ -107,6 +110,10 @@ fi
 cp $XCOMP_CONF ${OTP_SRC}/$XCOMP_CONF_PATH
 
 
+show "Patching some files for arm-apple-darwin gcc compiler and iOS SDK compatibility"
+patch -N -p1 < arm-apple-darwin.patch
+
+
 #Enter the Build directory and do configure
 #TODO: remove any SKIP files that were created previously
 show "Configuring for cross compilation using $XCOMP_CONF_PATH"
@@ -129,18 +136,19 @@ then
 
     OTP_MK="make/${HOST}/otp.mk"
     show "Patching $OTP_MK to edit erlc options"
-    sed -i "s/ \+debug_info/$NEW_COMPILE_OPTS/" $OTP_MK
+    sed -ie "s/ \+debug_info/$NEW_COMPILE_OPTS/" $OTP_MK
 fi
 
 #Put SKIP files in the apps we don't want.
 show "Selecting applications to keep"
 KEEPSIES=$(tr '\n' ' ' < ../keep)
 for APP in $(ls lib); do
+  [ -d lib/$APP ] &&
   echo "Not listed in keep file" >> lib/$APP/SKIP
 done
 for KEEP in $KEEPSIES; do
   show "Keeping $KEEP"
-  rm lib/$KEEP/SKIP
+  rm -f lib/$KEEP/SKIP
 done
 
 show "Creating bootstrap and building"
@@ -156,7 +164,7 @@ show "Creating release"
 
 echo $(pwd)
 
-pushd release/${HOST}/
+pushd release/${HOST}/ 2> /dev/null || (show "Building release failed!" ; exit 1)
 
 show "Running Install script to setup paths and executables"
 ./Install -cross -minimal $TARGET_ERL_ROOT
@@ -171,7 +179,7 @@ fi
 if [ $STRIP_BIN == true ]
 then
     show "Stripping erts binaries"
-    ${HOST}-strip erts-*/bin/*
+    $STRIP_CMD erts-*/bin/*
 fi
 
 show "Removing source code, documentation, and examples"
@@ -202,3 +210,6 @@ tar czf ${WD}/${TAR_NAME}.tgz .
 
 popd
 popd
+
+## Test the resulted binaries for TARGET compatability
+file ./otp_src_R14B01/bin/${HOST}/erlexec
