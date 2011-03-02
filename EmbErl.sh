@@ -18,7 +18,7 @@ STRIP_BIN=false
 STRIP_BEAM=false
 SLIM_COMPILE=false
 COMPRESS_COMPILE=false
-COMPRESS_APP=true
+COMPRESS_APP=false
 
 #standard gcc opt levels [1,2,3,s]
 OPT_LEVEL=s
@@ -28,7 +28,7 @@ HOST=arm-apple-darwin10
 STRIP_CMD="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/strip"
 
 #Arguments parsing
-while getopts ":scCoH:h" Option
+while getopts ":sScCoH:h" Option
 do
     case $Option in
         s ) #echo "Stripping beam and Slim compiles"
@@ -38,6 +38,7 @@ do
             ;;
         S ) #echo "Stipping binaries"
             STRIP_BIN=true
+            TAR_NAME=${TAR_NAME}S
             ;;
         c ) #echo "Compress compiling"
             COMPRESS_COMPILE=true
@@ -60,6 +61,7 @@ do
 
 Available options:
 -s          Strip beam files and compile with the slim flag
+-S          Strip binaries
 -c          Compile beams using the compress flag
 -C          Compress applications into zip's
 -o <arg>    Compile the virtual machine with the <arg> optimization flag
