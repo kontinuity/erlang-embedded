@@ -217,7 +217,7 @@ erl_xcomp_bigendian=no
 # * `erl_xcomp_getaddrinfo' - `yes|no'. Defaults to `no'. If `yes', the target
 #   system must have a working `getaddrinfo()' implementation that can
 #   handle both IPv4 and IPv6.
-#erl_xcomp_getaddrinfo=
+erl_xcomp_getaddrinfo=yes
 
 # * `erl_xcomp_gethrvtime_procfs_ioctl' - `yes|no'. Defaults to `no'. If `yes',
 #   the target system must have a working `gethrvtime()' implementation and
