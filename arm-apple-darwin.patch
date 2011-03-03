@@ -217,7 +217,7 @@
      CFLAGS32="$CFLAGS"
    fi
 --- a/otp_src_R14B01/erts/etc/unix/run_erl.c	2011-02-28 16:41:34.000000000 +0100
-+++ b/otp_src_R14B01/erts/etc/unix/run_erl.c	2011-02-28 16:41:20.000000000 +0100
++++ b/otp_src_R14B01/erts/etc/unix/run_erl.c	2011-02-28 16:41:34.000000000 +0100
 @@ -67,7 +67,7 @@
  #  include <pty.h>
  #endif
@@ -227,3 +227,14 @@
  #endif
  #ifdef HAVE_UTIL_H
  #  include <util.h>
+--- a/otp_src_R14B01/erts/emulator/beam/erl_init.c     2010-12-07 16:07:22.000000000 +0100
++++ b/otp_src_R14B01/erts/emulator/beam/erl_init.c     2010-12-07 16:07:22.000000000 +0100
+@@ -868,7 +868,7 @@
+     /*
+      * The default stack size on MacOS X is too small for pcre.
+      */
+-    erts_sched_thread_suggested_stack_size = 256;
++    erts_sched_thread_suggested_stack_size = 255;
+ #endif
+ 
+ #ifdef DEBUG

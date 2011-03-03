@@ -6,6 +6,8 @@ VERSION=R14B01
 OTP_SRC=otp_src_$VERSION
 OTP_SRC_TAR=${OTP_SRC}.tar.gz
 
+WD=$(pwd)
+
 XCOMP_CONF=erl-xcomp-arm-darwin.conf
 XCOMP_CONF_PATH=xcomp/$XCOMP_CONF
 
@@ -27,6 +29,8 @@ HOST=arm-apple-darwin10
 SDK_VER="4.2"
 DEV_ROOT="/Developer/Platforms/iPhoneOS.platform/Developer"
 SDK_ROOT="${DEV_ROOT}/SDKs/iPhoneOS${SDK_VER}.sdk"
+
+SYS_ROOT="${WD}/sysroot"
 
 #STRIP_CMD=${HOST}-strip
 STRIP_CMD="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/strip"
@@ -93,8 +97,6 @@ EOF
 
 # END OF FUNCTION DECLARATION
 
-WD=$(pwd)
-
 show "Preparing OpenSSL"
 cp "${SDK_ROOT}/usr/lib/bundle1.o"        "${WD}/sysroot/usr/lib/bundle1.o"
 cp "${SDK_ROOT}/usr/lib/libSystem.dylib"  "${WD}/sysroot/usr/lib/libSystem.dylib"
@@ -104,7 +106,7 @@ show "Create the erl-xcomp configuration"
 cat $XCOMP_CONF.in > $XCOMP_CONF
 sed -i "s/@OPT_LEVEL@/${OPT_LEVEL}/" $XCOMP_CONF
 sed -i "s/@HOST@/${HOST}/" $XCOMP_CONF
-sed -i "s/@SDK_ROOT@/${SDK_ROOT}/" $XCOMP_CONF
+sed -i "s,@SDK_ROOT@,${SYS_ROOT}," $XCOMP_CONF
 
 #Do not do unnecessary work
 if [ -e ${TAR_NAME}.tgz ]
@@ -122,14 +124,16 @@ fi
 cp $XCOMP_CONF ${OTP_SRC}/$XCOMP_CONF_PATH
 
 
+#Enter the Build directory
+pushd $OTP_SRC
+
 show "Patching some files for arm-apple-darwin gcc compiler and iOS SDK compatibility"
-patch -N -p1 < arm-apple-darwin.patch
+patch -N -p2 < "${WD}/arm-apple-darwin.patch"
 
 
-#Enter the Build directory and do configure
+#Do configure
 #TODO: remove any SKIP files that were created previously
 show "Configuring for cross compilation using $XCOMP_CONF_PATH"
-pushd $OTP_SRC
 ./otp_build configure --xcomp-conf=$XCOMP_CONF_PATH
 
 if [[ "$SLIM_COMPILE" == "true" || "$COMPRESS_COMPILE" == "true" ]]

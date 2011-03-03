@@ -190,6 +190,7 @@ Change the `otp_build` calls by adding the `-a` flag:
     +./otp_build release
     -./otp_build release -a
 
+
 ## Crypto compilation fails
 
 ### Problem
@@ -215,4 +216,48 @@ right path and set the path information, the following error occurs:
     make: *** [release] Error 2
 
 ### Solution
-???
+Some libraries are needed for the compilation process of crypto and
+ssl. Some of them can be shared by the iOS SDK, e.g.:
+
+ * bundle1.o
+ * libSystem.dylib
+ * libgcc_s.1.dylib
+
+Some others can be compiled yourself or are included:
+
+ * libcrypto.dylib
+ * libssl.dylib
+
+Also header include files are needed, which can be get from the
+official OpenSSL download site.
+
+After putting all files in the correct directory and setting the path
+to them, the compilation works.
+
+
+## Can't allocate default thread stack size of 256 kilowords
+
+### Problem
+When starting the Erlang VM, it immediately crashes with the error:
+
+    failed to set stack size for scheduler thread to 1048576 bytes
+
+As from the Erlang/OTP release notes, the default stack size for
+threads in the async-thread pool has been shrunk to 8 kilowords, i.e.,
+32 KB on 32-bit architectures.
+
+### Solution
+For OpenBSD system this value was increased to 256 kilowords, i.e.,
+1MB on 32-bit architectures. This is implemented in
+`/erts/emulator/beam/erl_init.c:867`:
+
+    #if (defined(__APPLE__) && defined(__MACH__)) || defined(__DARWIN__)
+         /*
+          * The default stack size on MacOS X is too small for pcre.
+          */
+          erts_sched_thread_suggested_stack_size = 256;
+    #endif
+
+So the AppleTV is also compiled with the 256 kilowords. This needs to
+be patched; a value of 255 works out fine. Note: So far, no tests have
+been done if `pcre` would still work then.
