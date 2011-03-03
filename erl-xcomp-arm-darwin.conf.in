@@ -175,7 +175,7 @@ AR="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/ar"
 #   skipped if the system root has not been set. The system root might be
 #   needed for other things too. If this is the case and the system root
 #   has not been set, `configure' will fail and request you to set it.
-#erl_xcomp_sysroot=
+erl_xcomp_sysroot=@SDK_ROOT@
 
 # * `erl_xcomp_isysroot' - The absolute path to the system root for includes
 #   of the cross compilation environment. If not set, this value defaults

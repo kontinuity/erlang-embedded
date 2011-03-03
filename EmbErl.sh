@@ -24,6 +24,10 @@ COMPRESS_APP=false
 OPT_LEVEL=s
 HOST=arm-apple-darwin10
 
+SDK_VER="4.2"
+DEV_ROOT="/Developer/Platforms/iPhoneOS.platform/Developer"
+SDK_ROOT="${DEV_ROOT}/SDKs/iPhoneOS${SDK_VER}.sdk"
+
 #STRIP_CMD=${HOST}-strip
 STRIP_CMD="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/strip"
 
@@ -74,10 +78,19 @@ Available options:
     esac
 done
 
+show "Preparing OpenSSL"
+./sysroot/build_openssl.sh
+#ln -s ${PWD}/sysroot/usr/lib/libcrypto.dylib ${SDK_ROOT}/usr/lib/libcrypto.dylib
+#ln -s ${PWD}/sysroot/usr/include/openssl     ${SDK_ROOT}/usr/include/openssl
+cp ${SDK_ROOT}/usr/lib/bundle1.o        ./sysroot/usr/lib/bundle1.o
+cp ${SDK_ROOT}/usr/lib/libSystem.dylib  ./sysroot/usr/lib/libSystem.dylib
+cp ${SDK_ROOT}/usr/lib/libgcc_s.1.dylib ./sysroot/usr/lib/libgcc_s.1.dylib
+
 #Create the erl-xcomp configuration
 cat $XCOMP_CONF.in > $XCOMP_CONF
 sed -i "s/@OPT_LEVEL@/${OPT_LEVEL}/" $XCOMP_CONF
 sed -i "s/@HOST@/${HOST}/" $XCOMP_CONF
+sed -i "s/@SDK_ROOT@/${SDK_ROOT}/" $XCOMP_CONF
 
 ## FUNCTION DECLARATION SPACE
 

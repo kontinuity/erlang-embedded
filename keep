@@ -7,3 +7,5 @@ tools
 inets
 mnesia
 public_key
+crypto
+ssl

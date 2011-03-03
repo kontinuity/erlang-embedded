@@ -197,5 +197,22 @@ Change the `otp_build` calls by adding the `-a` flag:
 
 Crypto can't be compiled, because the openssl library is not present.
 
+After compiling OpenSSL and copying all the header files into the
+right path and set the path information, the following error occurs:
+
+    ld: warning: in /usr/lib/bundle1.o, missing required architecture arm in file
+    ld: warning: in /usr/lib/libcrypto.dylib, missing required architecture arm in file
+    ld: warning: in /usr/lib/libgcc_s.1.dylib, missing required architecture arm in file
+    ld: warning: in /usr/lib/libSystem.dylib, missing required architecture arm in file
+    ld: symbol dyld_stub_binding_helper not defined (usually in crt1.o/dylib1.o/bundle1.o)
+    collect2: ld returned 1 exit status
+    make[6]: *** [../priv/lib/arm-apple-darwin10/crypto.so] Error 1
+    make[5]: *** [release_spec] Error 2
+    make[4]: *** [release] Error 2
+    make[3]: *** [release] Error 2
+    make[2]: *** [release] Error 2
+    make[1]: *** [release] Error 2
+    make: *** [release] Error 2
+
 ### Solution
 ???
