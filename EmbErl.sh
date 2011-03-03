@@ -78,20 +78,6 @@ Available options:
     esac
 done
 
-show "Preparing OpenSSL"
-./sysroot/build_openssl.sh
-#ln -s ${PWD}/sysroot/usr/lib/libcrypto.dylib ${SDK_ROOT}/usr/lib/libcrypto.dylib
-#ln -s ${PWD}/sysroot/usr/include/openssl     ${SDK_ROOT}/usr/include/openssl
-cp ${SDK_ROOT}/usr/lib/bundle1.o        ./sysroot/usr/lib/bundle1.o
-cp ${SDK_ROOT}/usr/lib/libSystem.dylib  ./sysroot/usr/lib/libSystem.dylib
-cp ${SDK_ROOT}/usr/lib/libgcc_s.1.dylib ./sysroot/usr/lib/libgcc_s.1.dylib
-
-#Create the erl-xcomp configuration
-cat $XCOMP_CONF.in > $XCOMP_CONF
-sed -i "s/@OPT_LEVEL@/${OPT_LEVEL}/" $XCOMP_CONF
-sed -i "s/@HOST@/${HOST}/" $XCOMP_CONF
-sed -i "s/@SDK_ROOT@/${SDK_ROOT}/" $XCOMP_CONF
-
 ## FUNCTION DECLARATION SPACE
 
 show()
@@ -109,10 +95,21 @@ EOF
 
 WD=$(pwd)
 
+show "Preparing OpenSSL"
+cp "${SDK_ROOT}/usr/lib/bundle1.o"        "${WD}/sysroot/usr/lib/bundle1.o"
+cp "${SDK_ROOT}/usr/lib/libSystem.dylib"  "${WD}/sysroot/usr/lib/libSystem.dylib"
+cp "${SDK_ROOT}/usr/lib/libgcc_s.1.dylib" "${WD}/sysroot/usr/lib/libgcc_s.1.dylib"
+
+show "Create the erl-xcomp configuration"
+cat $XCOMP_CONF.in > $XCOMP_CONF
+sed -i "s/@OPT_LEVEL@/${OPT_LEVEL}/" $XCOMP_CONF
+sed -i "s/@HOST@/${HOST}/" $XCOMP_CONF
+sed -i "s/@SDK_ROOT@/${SDK_ROOT}/" $XCOMP_CONF
+
 #Do not do unnecessary work
 if [ -e ${TAR_NAME}.tgz ]
 then
-    show "The build exists.. see $TAR_NAME.tgz"
+    show "The build exists... see $TAR_NAME.tgz"
     exit 0
 fi
 
