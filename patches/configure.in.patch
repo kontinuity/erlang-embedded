@@ -1,0 +1,25 @@
+--- a/otp_src_R14B01/configure.in	2010-12-07 16:07:22.000000000 +0100
++++ b/otp_src_R14B01/configure.in	2011-02-28 11:55:31.000000000 +0100
+@@ -344,9 +344,9 @@
+ 	LDFLAGS="-m64 $LDFLAGS"
+ 	export LDFLAGS
+ elif test X"$TMPSYS" '=' X"Darwin-i386"; then
+-	CFLAGS="-m32 $CFLAGS"
++	CFLAGS="$CFLAGS"
+ 	export CFLAGS
+-	LDFLAGS="-m32 $LDFLAGS"
++	LDFLAGS="$LDFLAGS"
+ 	export LDFLAGS
+ fi
+ 
+@@ -359,9 +359,9 @@
+ fi
+ if test X${enable_m32_build} = Xyes; then
+ 	enable_hipe=no
+-	CFLAGS="-m32 $CFLAGS"
++	CFLAGS="$CFLAGS"
+ 	export CFLAGS
+-	LDFLAGS="-m32 $LDFLAGS"
++	LDFLAGS="$LDFLAGS"
+ 	export LDFLAGS
+ fi

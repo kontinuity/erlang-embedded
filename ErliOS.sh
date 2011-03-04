@@ -127,9 +127,12 @@ cp $XCOMP_CONF ${OTP_SRC}/$XCOMP_CONF_PATH
 #Enter the Build directory
 pushd $OTP_SRC
 
-show "Patching some files for arm-apple-darwin gcc compiler and iOS SDK compatibility"
-patch -N -p2 < "${WD}/arm-apple-darwin.patch"
-
+show "Patching files for arm-apple-darwin gcc compiler and iOS SDK compatibility"
+patch -N -p2 < "${WD}/patches/configure.in.patch"
+#patch -N -p2 < "${WD}/patches/configure.patch"
+patch -N -p2 < "${WD}/patches/erts-configure.in.patch"
+patch -N -p2 < "${WD}/patches/erts-emulator-beam-erl_init.c.patch"
+patch -N -p2 < "${WD}/patches/erts-etc-unix-run_erl.c.patch"
 
 #Do configure
 #TODO: remove any SKIP files that were created previously

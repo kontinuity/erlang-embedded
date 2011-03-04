@@ -1,0 +1,11 @@
+--- a/otp_src_R14B01/erts/emulator/beam/erl_init.c     2010-12-07 16:07:22.000000000 +0100
++++ b/otp_src_R14B01/erts/emulator/beam/erl_init.c     2010-12-07 16:07:22.000000000 +0100
+@@ -868,7 +868,7 @@
+     /*
+      * The default stack size on MacOS X is too small for pcre.
+      */
+-    erts_sched_thread_suggested_stack_size = 256;
++    erts_sched_thread_suggested_stack_size = 255;
+ #endif
+ 
+ #ifdef DEBUG
