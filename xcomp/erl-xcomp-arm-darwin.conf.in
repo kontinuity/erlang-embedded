@@ -59,12 +59,9 @@ erl_xcomp_host=@HOST@
 
 # * `erl_xcomp_configure_flags' - Extra configure flags to pass to the
 #   `configure' script.
-#erl_xcomp_configure_flags="--disable-hipe --disable-threads --disable-smp \
-#--disable-megaco-flex-scanner-lineno --disable-megaco-reentrant-flex-scanner \
-#--disable-dynamic-ssl-lib --without-termcap --without-javac --without-ssl"
 erl_xcomp_configure_flags="--disable-hipe --disable-threads --disable-smp \
 --disable-megaco-flex-scanner-lineno --disable-megaco-reentrant-flex-scanner \
---enable-dynamic-ssl-lib --without-javac"
+--disable-dynamic-ssl-lib --without-javac"
 
 ## -- Cross Compiler and Other Tools -------------------------------------------
 
@@ -75,14 +72,11 @@ erl_xcomp_configure_flags="--disable-hipe --disable-threads --disable-smp \
 ## All variables in this section can also be used when native compiling.
 
 # * `CC' - C compiler.
-#CC=gcc
 CC="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-gcc-4.2.1"
 #CC="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-llvm-gcc-4.2"
 
 # * `CFLAGS' - C compiler flags.
-#CFLAGS="-O@OPT_LEVEL@ -DSMALL_MEMORY"
-#CFLAGS="-O@OPT_LEVEL@ -DSMALL_MEMORY -miphoneos-version-min=4.1 -std=c99 -pipe -no-cpp-precomp --sysroot='/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk' -isystem /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include"
-CFLAGS="-O@OPT_LEVEL@ -DSMALL_MEMORY --sysroot='/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk' -isystem /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include"
+CFLAGS="-O@OPT_LEVEL@ -DSMALL_MEMORY --sysroot='/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS@SDK_VER@.sdk' -isystem /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS@SDK_VER@.sdk/usr/include"
 
 # * `STATIC_CFLAGS' - Static C compiler flags.
 #STATIC_CFLAGS=
@@ -93,33 +87,25 @@ CFLAGS="-O@OPT_LEVEL@ -DSMALL_MEMORY --sysroot='/Developer/Platforms/iPhoneOS.pl
 #CFLAG_RUNTIME_LIBRARY_PATH=
 
 # * `CPP' - C pre-processor.
-#CPP=/tmp/gnuarm-4.0.2/bin/arm-elf-cpp
 CPP="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-cpp-4.2.1"
 #CPP="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/cpp -E"
 
 # * `CPPFLAGS' - C pre-processor flags.
-#CPPFLAGS=
-#CPPFLAGS="-miphoneos-version-min=4.1 -std=c99 -pipe -no-cpp-precomp -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include"
-CPPFLAGS="-I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include"
+CPPFLAGS="-I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS@SDK_VER@.sdk/usr/include"
 
 # * `CXX' - C++ compiler.
-#CXX=
 #CXX="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-g++-4.2.1"
 CXX="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-llvm-g++-4.2"
 
 # * `CXXFLAGS' - C++ compiler flags.
-#CXXFLAGS=
-#CXXFLAGS="-miphoneos-version-min=4.1 -std=c99 -pipe -no-cpp-precomp --sysroot='/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk' -isystem /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include"
-CXXFLAGS="--sysroot='/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk' -isystem /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include"
+CXXFLAGS="--sysroot='/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS@SDK_VER@.sdk' -isystem /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS@SDK_VER@.sdk/usr/include"
 
 # * `LD' - Linker.
 #LD=
 LD="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/ld"
 
 # * `LDFLAGS' - Linker flags.
-#LDFLAGS=
-#LDFLAGS="-miphoneos-version-min=4.1 -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include -L/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/lib"
-LDFLAGS="-I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include -L/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/lib"
+LDFLAGS="-I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS@SDK_VER@.sdk/usr/include -L/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS@SDK_VER@.sdk/usr/lib"
 
 # * `LIBS' - Libraries.
 #LIBS=
@@ -154,11 +140,9 @@ LDFLAGS="-I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk
 ## -- Other Tools --
 
 # * `RANLIB' - `ranlib' archive index tool.
-#RANLIB=
 RANLIB="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/ranlib"
 
 # * `AR' - `ar' archiving tool.
-#AR=
 AR="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/ar"
 
 # * `GETCONF' - `getconf' system configuration inspection tool. `getconf' is

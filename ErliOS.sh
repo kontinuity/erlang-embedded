@@ -102,12 +102,6 @@ cp "${SDK_ROOT}/usr/lib/bundle1.o"        "${WD}/sysroot/usr/lib/bundle1.o"
 cp "${SDK_ROOT}/usr/lib/libSystem.dylib"  "${WD}/sysroot/usr/lib/libSystem.dylib"
 cp "${SDK_ROOT}/usr/lib/libgcc_s.1.dylib" "${WD}/sysroot/usr/lib/libgcc_s.1.dylib"
 
-show "Create the erl-xcomp configuration"
-cat $XCOMP_CONF.in > $XCOMP_CONF
-sed -i "s/@OPT_LEVEL@/${OPT_LEVEL}/" $XCOMP_CONF
-sed -i "s/@HOST@/${HOST}/" $XCOMP_CONF
-sed -i "s,@SDK_ROOT@,${SYS_ROOT}," $XCOMP_CONF
-
 #Do not do unnecessary work
 if [ -e ${TAR_NAME}.tgz ]
 then
@@ -121,8 +115,12 @@ fi
 #Unpack
 [ -d $OTP_SRC ] || (show "Unpacking $OTP_SRC" && tar xfz $OTP_SRC_TAR)
 
-cp $XCOMP_CONF ${OTP_SRC}/$XCOMP_CONF_PATH
-
+show "Create the erl-xcomp configuration"
+cat $XCOMP_CONF_PATH.in > ${OTP_SRC}/$XCOMP_CONF_PATH
+sed -i "s/@OPT_LEVEL@/${OPT_LEVEL}/" ${OTP_SRC}/$XCOMP_CONF_PATH
+sed -i "s/@HOST@/${HOST}/" ${OTP_SRC}/$XCOMP_CONF_PATH
+sed -i "s,@SDK_ROOT@,${SYS_ROOT}," ${OTP_SRC}/$XCOMP_CONF_PATH
+sed -i "s,@SDK_VER@,${SYS_VER}," ${OTP_SRC}/$XCOMP_CONF_PATH
 
 #Enter the Build directory
 pushd $OTP_SRC
