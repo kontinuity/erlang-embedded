@@ -1,6 +1,7 @@
 #!/bin/bash
 
 VERSION=R14B01
+SDK_VER=4.3
 
 ################################################################################
 
@@ -29,7 +30,6 @@ COMPRESS_APP=false
 OPT_LEVEL=s
 HOST=arm-apple-darwin10
 
-SDK_VER="4.2"
 DEV_ROOT="/Developer/Platforms/iPhoneOS.platform/Developer"
 SDK_ROOT="${DEV_ROOT}/SDKs/iPhoneOS${SDK_VER}.sdk"
 
