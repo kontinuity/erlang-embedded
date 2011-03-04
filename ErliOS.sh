@@ -122,8 +122,8 @@ show "Create the erl-xcomp configuration"
 cat $XCOMP_CONF_PATH.in > ${OTP_SRC}/$XCOMP_CONF_PATH
 sed -i "s/@OPT_LEVEL@/${OPT_LEVEL}/" ${OTP_SRC}/$XCOMP_CONF_PATH
 sed -i "s/@HOST@/${HOST}/" ${OTP_SRC}/$XCOMP_CONF_PATH
+sed -i "s/@SDK_VER@/${SDK_VER}/" ${OTP_SRC}/$XCOMP_CONF_PATH
 sed -i "s,@SDK_ROOT@,${SYS_ROOT}," ${OTP_SRC}/$XCOMP_CONF_PATH
-sed -i "s,@SDK_VER@,${SYS_VER}," ${OTP_SRC}/$XCOMP_CONF_PATH
 
 #Enter the Build directory
 pushd $OTP_SRC
