@@ -234,6 +234,26 @@ official OpenSSL download site.
 After putting all files in the correct directory and setting the path
 to them, the compilation works.
 
+## Using --disable-dynamic-ssl does not work
+
+### Problem
+When using the `--disable-dynamic-ssl` flag, the compiler can't find
+`*.a` files, for i386 and reports this error:
+
+    gcc -m32 -bundle -flat_namespace -undefined suppress -o ../priv/lib/i386-apple-darwin10.6.0/crypto.so ../ priv/obj/i386-apple-darwin10.6.0/crypto.o /libcrypto.a
+    i686-apple-darwin10-gcc-4.2.1: /libcrypto.a: No such file or directory
+    make[6]: *** [../priv/lib/i386-apple-darwin10.6.0/crypto.so] Error 1
+    make[5]: *** [release_spec] Error 2
+    make[4]: *** [release] Error 2
+    make[3]: *** [release] Error 2
+    make[2]: *** [release] Error 2
+    make[1]: *** [release] Error 2
+    make: *** [release] Error 2
+
+### Solution
+??? Set path correctly and add the `*.a` files for i386 (although not
+really needed for the iOS device compilation later).
+
 
 ## Can't allocate default thread stack size of 256 kilowords
 
