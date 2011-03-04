@@ -1,19 +1,22 @@
 #!/bin/bash
 
-PROJECT=EmbErl
-
 VERSION=R14B01
-OTP_SRC=otp_src_$VERSION
-OTP_SRC_TAR=${OTP_SRC}.tar.gz
+
+################################################################################
+
+PROJECT=ErliOS
 
 WD=$(pwd)
+
+OTP_SRC=otp_src_$VERSION
+OTP_SRC_TAR=${OTP_SRC}.tar.gz
 
 XCOMP_CONF=erl-xcomp-arm-darwin.conf
 XCOMP_CONF_PATH=xcomp/$XCOMP_CONF
 
 TARGET_ERL_ROOT=/usr/local/erlang
 
-TAR_NAME="EmbErl_"
+TAR_NAME="${PROJECT}_"
 
 #standard configuration values
 STRIP_BIN=false
@@ -65,7 +68,7 @@ do
             TAR_NAME=${TAR_NAME}H-${OPTARG}
             ;;
         h ) echo \
-"./Emberl.sh [options]
+"./${PROJECT}.sh [options]
 
 Available options:
 -s          Strip beam files and compile with the slim flag
