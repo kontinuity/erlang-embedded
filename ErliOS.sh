@@ -1,7 +1,7 @@
 #!/bin/bash
 
-VERSION=R14B01
-SDK_VER=4.3
+VERSION=R15B01
+SDK_VER=6.0
 
 ################################################################################
 
@@ -15,7 +15,7 @@ OTP_SRC_TAR=${OTP_SRC}.tar.gz
 XCOMP_CONF=erl-xcomp-arm-darwin.conf
 XCOMP_CONF_PATH=xcomp/$XCOMP_CONF
 
-TARGET_ERL_ROOT=/usr/local/erlang
+TARGET_ERL_ROOT=/usr/share/erlang
 
 TAR_NAME="${PROJECT}_"
 
@@ -30,13 +30,13 @@ COMPRESS_APP=false
 OPT_LEVEL=s
 HOST=arm-apple-darwin10
 
-DEV_ROOT="/Developer/Platforms/iPhoneOS.platform/Developer"
+DEV_ROOT="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer"
 SDK_ROOT="${DEV_ROOT}/SDKs/iPhoneOS${SDK_VER}.sdk"
 
 SYS_ROOT="${WD}/sysroot"
 
 #STRIP_CMD=${HOST}-strip
-STRIP_CMD="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/strip"
+STRIP_CMD="${DEV_ROOT}/usr/bin/strip"
 
 #Arguments parsing
 while getopts ":sScCoH:h" Option
@@ -101,6 +101,7 @@ EOF
 # END OF FUNCTION DECLARATION
 
 show "Preparing OpenSSL"
+mkdir -p "${WD}/sysroot/usr/lib"
 cp "${SDK_ROOT}/usr/lib/bundle1.o"        "${WD}/sysroot/usr/lib/bundle1.o"
 cp "${SDK_ROOT}/usr/lib/libSystem.dylib"  "${WD}/sysroot/usr/lib/libSystem.dylib"
 cp "${SDK_ROOT}/usr/lib/libgcc_s.1.dylib" "${WD}/sysroot/usr/lib/libgcc_s.1.dylib"
@@ -120,10 +121,10 @@ fi
 
 show "Create the erl-xcomp configuration"
 cat $XCOMP_CONF_PATH.in > ${OTP_SRC}/$XCOMP_CONF_PATH
-sed -i "s/@OPT_LEVEL@/${OPT_LEVEL}/" ${OTP_SRC}/$XCOMP_CONF_PATH
-sed -i "s/@HOST@/${HOST}/" ${OTP_SRC}/$XCOMP_CONF_PATH
-sed -i "s/@SDK_VER@/${SDK_VER}/" ${OTP_SRC}/$XCOMP_CONF_PATH
-sed -i "s,@SDK_ROOT@,${SYS_ROOT}," ${OTP_SRC}/$XCOMP_CONF_PATH
+sed -i "" "s/@OPT_LEVEL@/${OPT_LEVEL}/g" ${OTP_SRC}/$XCOMP_CONF_PATH
+sed -i "" "s/@HOST@/${HOST}/g" ${OTP_SRC}/$XCOMP_CONF_PATH
+sed -i "" "s/@SDK_VER@/${SDK_VER}/g" ${OTP_SRC}/$XCOMP_CONF_PATH
+sed -i "" "s#@SDK_ROOT@#${SYS_ROOT}#g" ${OTP_SRC}/$XCOMP_CONF_PATH
 
 #Enter the Build directory
 pushd $OTP_SRC
@@ -170,6 +171,10 @@ for KEEP in $KEEPSIES; do
   show "Keeping $KEEP"
   rm -f lib/$KEEP/SKIP
 done
+
+sed -i "" "s/-m32//g" make/${HOST}/otp.mk
+sed -i "" "s/-m32//g" make/${HOST}/otp_ded.mk
+sed -i "" "s/-m32 $CFLAGS/$CFLAGS/g" erts/configure
 
 show "Creating bootstrap and building"
 ./otp_build boot -a
