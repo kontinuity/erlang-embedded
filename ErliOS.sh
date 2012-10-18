@@ -24,7 +24,7 @@ STRIP_BIN=false
 STRIP_BEAM=false
 SLIM_COMPILE=false
 COMPRESS_COMPILE=false
-COMPRESS_APP=false
+COMPRESS_APP=true
 
 #standard gcc opt levels [1,2,3,s]
 OPT_LEVEL=s
@@ -84,6 +84,11 @@ Available options:
             ;;
     esac
 done
+
+#Create the erl-xcomp configuration
+cat $XCOMP_CONF.in > $XCOMP_CONF
+sed -ie "s/@OPT_LEVEL@/${OPT_LEVEL}/" $XCOMP_CONF
+sed -ie "s/@HOST@/${HOST}/" $XCOMP_CONF
 
 ## FUNCTION DECLARATION SPACE
 
@@ -157,7 +162,7 @@ then
 
     OTP_MK="make/${HOST}/otp.mk"
     show "Patching $OTP_MK to edit erlc options"
-    sed -i "s/ \+debug_info/$NEW_COMPILE_OPTS/" $OTP_MK
+    sed -ie "s/ \+debug_info/$NEW_COMPILE_OPTS/" $OTP_MK
 fi
 
 #Put SKIP files in the apps we don't want.
